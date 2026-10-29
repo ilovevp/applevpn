@@ -1,0 +1,1688 @@
+[
+  {
+    "remarks": "🍎APPLE VPN (Сервер пустышка)",
+    "dns": {
+      "tag": "dns_inbound",
+      "hosts": {
+        "dns.google": ["8.8.8.8", "8.8.4.4"],
+        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
+        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
+      },
+      "servers": [
+        "https://one.one.one.one/dns-query",
+        "https://dns.google/dns-query",
+        {
+          "address": "https://common.dot.dns.yandex.net/dns-query",
+          "domains": ["geosite:category-ru", "domain:baboon.digital"]
+        }
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "disableFallback": false
+    },
+    "log": { "loglevel": "warning" },
+    "stats": {},
+    "policy": {
+      "system": { "statsOutboundUplink": true, "statsOutboundDownlink": true }
+    },
+    "routing": {
+      "rules": [
+        {
+          "port": "53",
+          "type": "field",
+          "network": "tcp,udp",
+          "inboundTag": ["socks", "http"],
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:one.one.one.one", "domain:dns.google"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:common.dot.dns.yandex.net"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["77.88.8.8", "77.88.8.1"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": ["bittorrent"],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:private"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["geoip:private"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:category-ru"],
+          "outboundTag": "direct"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": { "udp": true, "auth": "noauth" },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": { "allowTransparent": false },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    ],
+    "outbounds": [
+      { "tag": "direct", "protocol": "freedom", "settings": { "domainStrategy": "UseIPv4" } },
+      { "tag": "block", "protocol": "blackhole" },
+      { "tag": "dns-out", "protocol": "dns" }
+    ]
+  },
+  {
+    "remarks": "🇪🇺⚡ Автовыбор",
+    "dns": {
+      "tag": "dns_inbound",
+      "hosts": {
+        "dns.google": ["8.8.8.8", "8.8.4.4"],
+        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
+        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
+      },
+      "servers": [
+        "https://one.one.one.one/dns-query",
+        "https://dns.google/dns-query",
+        {
+          "address": "https://common.dot.dns.yandex.net/dns-query",
+          "domains": ["geosite:category-ru", "domain:baboon.digital"]
+        }
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "disableFallback": false
+    },
+    "log": { "loglevel": "warning" },
+    "stats": {},
+    "policy": {
+      "system": { "statsOutboundUplink": true, "statsOutboundDownlink": true }
+    },
+    "routing": {
+      "rules": [
+        {
+          "port": "53",
+          "type": "field",
+          "network": "tcp,udp",
+          "inboundTag": ["socks", "http"],
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:one.one.one.one", "domain:dns.google"],
+          "balancerTag": "Super_Balancer"
+        },
+        {
+          "ip": ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+          "type": "field",
+          "balancerTag": "Super_Balancer"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:common.dot.dns.yandex.net"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["77.88.8.8", "77.88.8.1"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": ["bittorrent"],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:private"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["geoip:private"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:category-ru"],
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "network": "tcp,udp",
+          "balancerTag": "Super_Balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "Super_Balancer",
+          "selector": ["proxy"],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "maxRTT": "1s",
+              "expected": 2,
+              "baselines": ["1s"],
+              "tolerance": 0.01
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": { "udp": true, "auth": "noauth" },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": { "allowTransparent": false },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "qwinl.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "tcpSettings": {},
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "212.192.156.15",
+            "publicKey": "hZs8YtFqJakUeYf9XiwxTLXXDy9G9z6zzDKDCLvVGGc",
+            "shortId": "b20b23b62f995b80",
+            "fingerprint": "firefox"
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "hdde.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "tcpSettings": {},
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "212.192.156.15",
+            "publicKey": "qXCbsrbt6VuZdDTEU4ZmRK6yYUWcIPA8MCE9NiTRXk8",
+            "shortId": "9c2033b07252442a",
+            "fingerprint": "firefox"
+          }
+        }
+      },
+      {
+        "tag": "proxy-3",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "ei.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "tcpSettings": {},
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "ei.baboon.digital",
+            "publicKey": "tfexhuu4WxxFCJJ1WKgaDUm-3WQW_dK9UTsSCWqxDiE",
+            "shortId": "380705b1fcb54f4e",
+            "fingerprint": "firefox"
+          }
+        }
+      },
+      {
+        "tag": "proxy-4",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "pln.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "tcpSettings": {},
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "212.192.156.15",
+            "publicKey": "zKL0yCdH_VnrcmUS0yIeZ8fXzPLRAlSt-NqeBORFDg0",
+            "shortId": "5599043f1d5a1d85",
+            "spiderX": "/",
+            "fingerprint": "firefox"
+          }
+        }
+      },
+      {
+        "tag": "proxy-5",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "fiqw.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "tcpSettings": {},
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "212.192.156.15",
+            "publicKey": "9aYIeZgz5BPUwBqpL2R8D0m_R2uZzYe24zWb3hHQFQU",
+            "shortId": "025a3935fdd1bde4",
+            "fingerprint": "firefox"
+          }
+        }
+      },
+      { "tag": "direct", "protocol": "freedom", "settings": { "domainStrategy": "UseIPv4" } },
+      { "tag": "block", "protocol": "blackhole" },
+      { "tag": "dns-out", "protocol": "dns" }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "3s",
+        "interval": "1m",
+        "sampling": 1,
+        "destination": "http://www.gstatic.com/generate_204"
+      },
+      "subjectSelector": ["proxy"]
+    }
+  },
+  {
+    "remarks": "🇩🇪 Германия",
+    "dns": {
+      "tag": "dns_inbound",
+      "hosts": {
+        "dns.google": ["8.8.8.8", "8.8.4.4"],
+        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
+        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
+      },
+      "servers": [
+        "https://one.one.one.one/dns-query",
+        "https://dns.google/dns-query",
+        {
+          "address": "https://common.dot.dns.yandex.net/dns-query",
+          "domains": ["geosite:category-ru", "domain:baboon.digital"]
+        }
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "disableFallback": false
+    },
+    "routing": {
+      "rules": [
+        {
+          "port": "53",
+          "type": "field",
+          "network": "tcp,udp",
+          "inboundTag": ["socks", "http"],
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:one.one.one.one", "domain:dns.google"],
+          "outboundTag": "proxy"
+        },
+        {
+          "ip": ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+          "type": "field",
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:common.dot.dns.yandex.net"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["77.88.8.8", "77.88.8.1"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": ["bittorrent"],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:private"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["geoip:private"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:category-ru"],
+          "outboundTag": "direct"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": { "udp": true, "auth": "noauth" },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": { "allowTransparent": false },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "hdde.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "tcpSettings": {},
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "212.192.156.15",
+            "publicKey": "qXCbsrbt6VuZdDTEU4ZmRK6yYUWcIPA8MCE9NiTRXk8",
+            "shortId": "9c2033b07252442a",
+            "fingerprint": "firefox"
+          }
+        }
+      },
+      { "tag": "direct", "protocol": "freedom", "settings": { "domainStrategy": "UseIPv4" } },
+      { "tag": "block", "protocol": "blackhole" },
+      { "tag": "dns-out", "protocol": "dns" }
+    ]
+  },
+  {
+    "remarks": "🇪🇪 Эстония",
+    "dns": {
+      "tag": "dns_inbound",
+      "hosts": {
+        "dns.google": ["8.8.8.8", "8.8.4.4"],
+        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
+        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
+      },
+      "servers": [
+        "https://one.one.one.one/dns-query",
+        "https://dns.google/dns-query",
+        {
+          "address": "https://common.dot.dns.yandex.net/dns-query",
+          "domains": ["geosite:category-ru", "domain:baboon.digital"]
+        }
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "disableFallback": false
+    },
+    "routing": {
+      "rules": [
+        {
+          "port": "53",
+          "type": "field",
+          "network": "tcp,udp",
+          "inboundTag": ["socks", "http"],
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:one.one.one.one", "domain:dns.google"],
+          "outboundTag": "proxy"
+        },
+        {
+          "ip": ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+          "type": "field",
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:common.dot.dns.yandex.net"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["77.88.8.8", "77.88.8.1"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": ["bittorrent"],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:private"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["geoip:private"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:category-ru"],
+          "outboundTag": "direct"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": { "udp": true, "auth": "noauth" },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": { "allowTransparent": false },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "ei.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "tcpSettings": {},
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "ei.baboon.digital",
+            "publicKey": "tfexhuu4WxxFCJJ1WKgaDUm-3WQW_dK9UTsSCWqxDiE",
+            "shortId": "380705b1fcb54f4e",
+            "fingerprint": "firefox"
+          }
+        }
+      },
+      { "tag": "direct", "protocol": "freedom", "settings": { "domainStrategy": "UseIPv4" } },
+      { "tag": "block", "protocol": "blackhole" },
+      { "tag": "dns-out", "protocol": "dns" }
+    ]
+  },
+  {
+    "remarks": "🇵🇱 Польша",
+    "dns": {
+      "tag": "dns_inbound",
+      "hosts": {
+        "dns.google": ["8.8.8.8", "8.8.4.4"],
+        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
+        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
+      },
+      "servers": [
+        "https://one.one.one.one/dns-query",
+        "https://dns.google/dns-query",
+        {
+          "address": "https://common.dot.dns.yandex.net/dns-query",
+          "domains": ["geosite:category-ru", "domain:baboon.digital"]
+        }
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "disableFallback": false
+    },
+    "routing": {
+      "rules": [
+        {
+          "port": "53",
+          "type": "field",
+          "network": "tcp,udp",
+          "inboundTag": ["socks", "http"],
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:one.one.one.one", "domain:dns.google"],
+          "outboundTag": "proxy"
+        },
+        {
+          "ip": ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+          "type": "field",
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:common.dot.dns.yandex.net"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["77.88.8.8", "77.88.8.1"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": ["bittorrent"],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:private"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["geoip:private"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:category-ru"],
+          "outboundTag": "direct"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": { "udp": true, "auth": "noauth" },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": { "allowTransparent": false },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "pln.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "tcpSettings": {},
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "212.192.156.15",
+            "publicKey": "zKL0yCdH_VnrcmUS0yIeZ8fXzPLRAlSt-NqeBORFDg0",
+            "shortId": "5599043f1d5a1d85",
+            "spiderX": "/",
+            "fingerprint": "firefox"
+          }
+        }
+      },
+      { "tag": "direct", "protocol": "freedom", "settings": { "domainStrategy": "UseIPv4" } },
+      { "tag": "block", "protocol": "blackhole" },
+      { "tag": "dns-out", "protocol": "dns" }
+    ]
+  },
+  {
+    "remarks": "🇳🇱 Нидерланды",
+    "dns": {
+      "tag": "dns_inbound",
+      "hosts": {
+        "dns.google": ["8.8.8.8", "8.8.4.4"],
+        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
+        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
+      },
+      "servers": [
+        "https://one.one.one.one/dns-query",
+        "https://dns.google/dns-query",
+        {
+          "address": "https://common.dot.dns.yandex.net/dns-query",
+          "domains": ["geosite:category-ru", "domain:baboon.digital"]
+        }
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "disableFallback": false
+    },
+    "routing": {
+      "rules": [
+        {
+          "port": "53",
+          "type": "field",
+          "network": "tcp,udp",
+          "inboundTag": ["socks", "http"],
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:one.one.one.one", "domain:dns.google"],
+          "outboundTag": "proxy"
+        },
+        {
+          "ip": ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+          "type": "field",
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:common.dot.dns.yandex.net"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["77.88.8.8", "77.88.8.1"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": ["bittorrent"],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:private"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["geoip:private"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:category-ru"],
+          "outboundTag": "direct"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": { "udp": true, "auth": "noauth" },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": { "allowTransparent": false },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "qwinl.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "tcpSettings": {},
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "212.192.156.15",
+            "publicKey": "hZs8YtFqJakUeYf9XiwxTLXXDy9G9z6zzDKDCLvVGGc",
+            "shortId": "b20b23b62f995b80",
+            "fingerprint": "firefox"
+          }
+        }
+      },
+      { "tag": "direct", "protocol": "freedom", "settings": { "domainStrategy": "UseIPv4" } },
+      { "tag": "block", "protocol": "blackhole" },
+      { "tag": "dns-out", "protocol": "dns" }
+    ]
+  },
+  {
+    "remarks": "🇫🇮 Финляндия",
+    "dns": {
+      "tag": "dns_inbound",
+      "hosts": {
+        "dns.google": ["8.8.8.8", "8.8.4.4"],
+        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
+        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
+      },
+      "servers": [
+        "https://one.one.one.one/dns-query",
+        "https://dns.google/dns-query",
+        {
+          "address": "https://common.dot.dns.yandex.net/dns-query",
+          "domains": ["geosite:category-ru", "domain:baboon.digital"]
+        }
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "disableFallback": false
+    },
+    "routing": {
+      "rules": [
+        {
+          "port": "53",
+          "type": "field",
+          "network": "tcp,udp",
+          "inboundTag": ["socks", "http"],
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:one.one.one.one", "domain:dns.google"],
+          "outboundTag": "proxy"
+        },
+        {
+          "ip": ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+          "type": "field",
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:common.dot.dns.yandex.net"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["77.88.8.8", "77.88.8.1"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": ["bittorrent"],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:binance", "geosite:bybit"],
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:private"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["geoip:private"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:category-ru"],
+          "outboundTag": "direct"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": { "udp": true, "auth": "noauth" },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": { "allowTransparent": false },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "fiqw.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "tcpSettings": {},
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "212.192.156.15",
+            "publicKey": "9aYIeZgz5BPUwBqpL2R8D0m_R2uZzYe24zWb3hHQFQU",
+            "shortId": "025a3935fdd1bde4",
+            "fingerprint": "firefox"
+          }
+        }
+      },
+      { "tag": "direct", "protocol": "freedom", "settings": { "domainStrategy": "UseIPv4" } },
+      { "tag": "block", "protocol": "blackhole" },
+      { "tag": "dns-out", "protocol": "dns" }
+    ]
+  },
+  {
+    "remarks": "🇷🇺 Россия",
+    "dns": {
+      "tag": "dns_inbound",
+      "hosts": {
+        "dns.google": ["8.8.8.8", "8.8.4.4"],
+        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
+        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
+      },
+      "servers": [
+        "https://one.one.one.one/dns-query",
+        "https://dns.google/dns-query",
+        {
+          "address": "https://common.dot.dns.yandex.net/dns-query",
+          "domains": ["geosite:category-ru", "domain:baboon.digital"]
+        }
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "disableFallback": false
+    },
+    "routing": {
+      "rules": [
+        {
+          "port": "53",
+          "type": "field",
+          "network": "tcp,udp",
+          "inboundTag": ["socks", "http"],
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:one.one.one.one", "domain:dns.google"],
+          "outboundTag": "proxy"
+        },
+        {
+          "ip": ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+          "type": "field",
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:common.dot.dns.yandex.net"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["77.88.8.8", "77.88.8.1"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": ["bittorrent"],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:private"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["geoip:private"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:category-ru"],
+          "outboundTag": "direct"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": { "udp": true, "auth": "noauth" },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": { "allowTransparent": false },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "rska.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "tcpSettings": {},
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "212.192.156.15",
+            "publicKey": "01o3_xx7ESyv7bFVerti1Yh4tt9HeH7r2L96eJ6SES8",
+            "shortId": "33b60a35ddf98793",
+            "fingerprint": "firefox"
+          }
+        }
+      },
+      { "tag": "direct", "protocol": "freedom", "settings": { "domainStrategy": "UseIPv4" } },
+      { "tag": "block", "protocol": "blackhole" },
+      { "tag": "dns-out", "protocol": "dns" }
+    ]
+  },
+  {
+    "remarks": "🇷🇺 БЕЛЫЕ СПИСКИ #1",
+    "dns": {
+      "tag": "dns_inbound",
+      "hosts": {
+        "dns.google": ["8.8.8.8", "8.8.4.4"],
+        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
+        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
+      },
+      "servers": [
+        "https://one.one.one.one/dns-query",
+        "https://dns.google/dns-query",
+        {
+          "address": "https://common.dot.dns.yandex.net/dns-query",
+          "domains": ["geosite:category-ru", "domain:baboon.digital"]
+        }
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "disableFallback": false
+    },
+    "routing": {
+      "rules": [
+        {
+          "port": "53",
+          "type": "field",
+          "network": "tcp,udp",
+          "inboundTag": ["socks", "http"],
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:one.one.one.one", "domain:dns.google"],
+          "outboundTag": "proxy"
+        },
+        {
+          "ip": ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+          "type": "field",
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:common.dot.dns.yandex.net"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["77.88.8.8", "77.88.8.1"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": ["bittorrent"],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:private"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["geoip:private"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:category-ru"],
+          "outboundTag": "direct"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": { "udp": true, "auth": "noauth" },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": { "allowTransparent": false },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "ybs.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": ""
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "xhttp",
+          "xhttpSettings": {
+            "mode": "packet-up",
+            "host": "ybs.baboon.digital",
+            "path": "/",
+            "extra": {
+              "seqKey": "id",
+              "headers": {
+                "Accept": "application/json, text/plain, */*",
+                "Origin": "https://onede.baboon.digital",
+                "Referer": "https://onede.baboon.digital/",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0",
+                "Sec-Fetch-Dest": "empty",
+                "Sec-Fetch-Mode": "cors",
+                "Sec-Fetch-Site": "same-origin",
+                "Accept-Language": "ru-RU,ru;q=0.9,en-US;q=0.6,en;q=0.4"
+              },
+              "sessionKey": "auth",
+              "noSSEHeader": true,
+              "xPaddingKey": "v",
+              "seqPlacement": "query",
+              "sessionIDKey": "auth",
+              "uplinkDataKey": "",
+              "xPaddingBytes": "100-1000",
+              "sessionIDTable": "alphabet",
+              "xPaddingHeader": "X-Upload-Offset",
+              "xPaddingMethod": "tokenish",
+              "sessionIDLength": "20",
+              "uplinkChunkSize": "3000-4000",
+              "sessionPlacement": "query",
+              "uplinkHTTPMethod": "GET",
+              "xPaddingObfsMode": true,
+              "xPaddingPlacement": "queryInHeader",
+              "scMaxEachPostBytes": "8000-12000",
+              "sessionIDPlacement": "query",
+              "uplinkDataPlacement": "header",
+              "scMinPostsIntervalMs": "30-70",
+              "scStreamUpServerSecs": "20-80",
+              "serverMaxHeaderBytes": 65536
+            }
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "ybs.baboon.digital",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": ["h2", "http/1.1"]
+          }
+        }
+      },
+      { "tag": "direct", "protocol": "freedom", "settings": { "domainStrategy": "UseIPv4" } },
+      { "tag": "block", "protocol": "blackhole" },
+      { "tag": "dns-out", "protocol": "dns" }
+    ]
+  },
+  {
+    "remarks": "🇩🇪 БЕЛЫЕ СПИСКИ #2",
+    "dns": {
+      "tag": "dns_inbound",
+      "hosts": {
+        "dns.google": ["8.8.8.8", "8.8.4.4"],
+        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
+        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
+      },
+      "servers": [
+        "https://one.one.one.one/dns-query",
+        "https://dns.google/dns-query",
+        {
+          "address": "https://common.dot.dns.yandex.net/dns-query",
+          "domains": ["geosite:category-ru", "domain:baboon.digital"]
+        }
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "disableFallback": false
+    },
+    "routing": {
+      "rules": [
+        {
+          "port": "53",
+          "type": "field",
+          "network": "tcp,udp",
+          "inboundTag": ["socks", "http"],
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:one.one.one.one", "domain:dns.google"],
+          "outboundTag": "proxy"
+        },
+        {
+          "ip": ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+          "type": "field",
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:common.dot.dns.yandex.net"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["77.88.8.8", "77.88.8.1"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": ["bittorrent"],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:private"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["geoip:private"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:category-ru"],
+          "outboundTag": "direct"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": { "udp": true, "auth": "noauth" },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": { "allowTransparent": false },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "onede.baboon.digital",
+              "port": 443,
+              "users": [
+                {
+                  "id": "6cd65ea5-5cc2-4713-81c3-499d4563f1ab",
+                  "encryption": "none",
+                  "flow": ""
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "xhttp",
+          "xhttpSettings": {
+            "mode": "packet-up",
+            "host": "onede.baboon.digital",
+            "path": "/",
+            "extra": {
+              "seqKey": "id",
+              "headers": {
+                "Accept": "application/json, text/plain, */*",
+                "Origin": "https://onede.baboon.digital",
+                "Referer": "https://onede.baboon.digital/",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0",
+                "Sec-Fetch-Dest": "empty",
+                "Sec-Fetch-Mode": "cors",
+                "Sec-Fetch-Site": "same-origin",
+                "Accept-Language": "ru-RU,ru;q=0.9,en-US;q=0.6,en;q=0.4"
+              },
+              "sessionKey": "auth",
+              "noSSEHeader": true,
+              "xPaddingKey": "v",
+              "seqPlacement": "query",
+              "sessionIDKey": "auth",
+              "uplinkDataKey": "",
+              "xPaddingBytes": "100-1000",
+              "sessionIDTable": "alphabet",
+              "xPaddingHeader": "X-Upload-Offset",
+              "xPaddingMethod": "tokenish",
+              "sessionIDLength": "20",
+              "uplinkChunkSize": "3000-4000",
+              "sessionPlacement": "query",
+              "uplinkHTTPMethod": "GET",
+              "xPaddingObfsMode": true,
+              "xPaddingPlacement": "queryInHeader",
+              "scMaxEachPostBytes": "8000-12000",
+              "sessionIDPlacement": "query",
+              "uplinkDataPlacement": "header",
+              "scMinPostsIntervalMs": "30-70",
+              "scStreamUpServerSecs": "20-80",
+              "serverMaxHeaderBytes": 65536
+            }
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "onede.baboon.digital",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": ["h2", "http/1.1"]
+          }
+        }
+      },
+      { "tag": "direct", "protocol": "freedom", "settings": { "domainStrategy": "UseIPv4" } },
+      { "tag": "block", "protocol": "blackhole" },
+      { "tag": "dns-out", "protocol": "dns" }
+    ]
+  },
+  {
+    "remarks": "🍎APPLE VPN (Сервер пустышка) — не скачивайте торренты!",
+    "dns": {
+      "tag": "dns_inbound",
+      "hosts": {
+        "dns.google": ["8.8.8.8", "8.8.4.4"],
+        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
+        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
+      },
+      "servers": [
+        "https://one.one.one.one/dns-query",
+        "https://dns.google/dns-query",
+        {
+          "address": "https://common.dot.dns.yandex.net/dns-query",
+          "domains": ["geosite:category-ru", "domain:baboon.digital"]
+        }
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "disableFallback": false
+    },
+    "log": { "loglevel": "warning" },
+    "stats": {},
+    "policy": {
+      "system": { "statsOutboundUplink": true, "statsOutboundDownlink": true }
+    },
+    "routing": {
+      "rules": [
+        {
+          "port": "53",
+          "type": "field",
+          "network": "tcp,udp",
+          "inboundTag": ["socks", "http"],
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:one.one.one.one", "domain:dns.google"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["domain:common.dot.dns.yandex.net"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["77.88.8.8", "77.88.8.1"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": ["bittorrent"],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:private"],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": ["geoip:private"],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": ["geosite:category-ru"],
+          "outboundTag": "direct"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": { "udp": true, "auth": "noauth" },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": { "allowTransparent": false },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    ],
+    "outbounds": [
+      { "tag": "direct", "protocol": "freedom", "settings": { "domainStrategy": "UseIPv4" } },
+      { "tag": "block", "protocol": "blackhole" },
+      { "tag": "dns-out", "protocol": "dns" }
+    ]
+  }
+]
